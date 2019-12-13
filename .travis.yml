@@ -1,12 +1,12 @@
 language: c++
 sudo: false
 env:
-  - NODE_VERSION="4"
-  - NODE_VERSION="5"
-  - NODE_VERSION="6"
-  - NODE_VERSION="7"
-  - NODE_VERSION="8"
-  - NODE_VERSION="9"
+#  - NODE_VERSION="4"
+#  - NODE_VERSION="5"
+#  - NODE_VERSION="6"
+#  - NODE_VERSION="7"
+#  - NODE_VERSION="8"
+#  - NODE_VERSION="9"
   - NODE_VERSION="10"
 
 # keep this blank to make sure there are no before_install steps
@@ -21,10 +21,23 @@ install:
   - npm install
 os:
   - linux
-  - osx
+#  - osx
 script:
   - npm test
 after_success:
   - npm run codecov
 notifications:
   email: false
+before_deploy:
+  - ./npm-pack.sh
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: "UNJlO9KCMyZLG1Sa0ctdHPm2O2lqRu5SLe0Wp47pf8RxwQcCU7LvA5uW0GJlypV9ESJrmQ+gG5uL/yXY+vK+emODP6nXxec/avoETHTFOUDNrgsSGWDQo03Lj/NFU0LoTOK71URi11YolO3OvclGHVYHtM+GYxtg3omrlmOEsGlaT37GrWbFMgYUg0ct9VJy8uZ21uy9tr+wMFTMDEcOPO65fmDxlDV+CGPO9XqhO3wqPLFgWNRdsfyg+cyFhVfHOx+CWXjE+G4lNqGEeof30DnBUrE/KGLbO/dv7Dbi4CIWC+Uqw16RNUkH9QsXKU9WAhH461A4YfiSAhGYXRvN3jRtGxtEhLRqxE3B0bVPSQoIm4DZSEax+DDesNc+kkzVJAlDGOS4s59Tuee09m4z3H7k7mx50lcswVBuraYqrgkFQLgYjMqMkFiGhzxITS5yc8PRBRcvU4or82t5j3pJ8Y0YetuByam0qVgpzTt0ujyUHMixQ1QXmhGeyGhLc3HzALRerNtbnZsZRiULmYeBxyY/wrNgFmDwrPW9EGvR3T1e0VPdpVhhGh2brY8r1yAb+Iv/WCCHNlcYYywf/K8qGmBFplp6S3sYTZhvjLmbhfYynKQmNBrhIcO28FRCqBMf1fsizD+B+/P4Jbrlmu1jXnwxyNEyH52c6AGG615PSX8="
+  file:
+    - shx-build.tar.gz
+  on:
+    tags: true
+    repo: elprans/shx
+    condition: $NODE_VERSION = 10
